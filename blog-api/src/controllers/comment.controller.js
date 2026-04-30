@@ -48,4 +48,28 @@ async function deleteComment(req, res, next) {
   }
 }
 
-module.exports = { listComments, createComment, deleteComment, createValidation };
+async function getComment(req, res, next) {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) throw new AppError('Comment not found', 404, 'NOT_FOUND');
+    res.json({ success: true, data: comment });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getPostComment(req, res, next) {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) throw new AppError('Post not found', 404, 'NOT_FOUND');
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment || String(comment.post_id) !== String(req.params.id)) {
+      throw new AppError('Comment not found', 404, 'NOT_FOUND');
+    }
+    res.json({ success: true, data: comment });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listComments, createComment, deleteComment, getComment, getPostComment, createValidation };
