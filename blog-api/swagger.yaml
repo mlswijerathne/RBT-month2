@@ -211,6 +211,27 @@ paths:
                   data:    { $ref: '#/components/schemas/User' }
         '401': { $ref: '#/components/responses/Unauthorized' }
 
+  /api/users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      tags: [Users]
+      summary: Get a public user profile
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:    { $ref: '#/components/schemas/User' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
   /api/posts:
     get:
       tags: [Posts]
@@ -374,12 +395,51 @@ paths:
         '401': { $ref: '#/components/responses/Unauthorized' }
         '404': { $ref: '#/components/responses/NotFound' }
 
+  /api/posts/{id}/comments/{commentId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+      - name: commentId
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      tags: [Comments]
+      summary: Get a single comment on a post
+      responses:
+        '200':
+          description: Comment detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:    { $ref: '#/components/schemas/Comment' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
   /api/comments/{id}:
     parameters:
       - name: id
         in: path
         required: true
         schema: { type: integer }
+    get:
+      tags: [Comments]
+      summary: Get a single comment
+      responses:
+        '200':
+          description: Comment detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:    { $ref: '#/components/schemas/Comment' }
+        '404': { $ref: '#/components/responses/NotFound' }
     delete:
       tags: [Comments]
       summary: Delete own comment
